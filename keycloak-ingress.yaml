@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    meta.helm.sh/release-name: camunda
+    meta.helm.sh/release-namespace: default
+    ingress.kubernetes.io/rewrite-target:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: keycloak
+    app.kubernetes.io/instance: camunda
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: keycloak
+    helm.sh/chart: keycloak-12.3.0
+  name: camunda-keycloak
+  namespace: default
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: keycloak.chaitan.live
+    http:
+      paths:
+      - backend:
+          service:
+            name: camunda-keycloak
+            port:
+              number: 80
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - keycloak.chaitan.live
+    secretName: camunda-platform-keycloak
+status:
+  loadBalancer:
+    ingress:
+    - hostname: 212-71-236-54.ip.linodeusercontent.com
+      ip: 212.71.236.54

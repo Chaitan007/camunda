@@ -1,0 +1,116 @@
+# Chart values for the Camunda Platform 8 Helm chart in combined Ingress setup.
+
+# This file deliberately contains only the values that differ from the defaults.
+# For changes and documentation, use your favorite diff tool to compare it with:
+# https://github.com/camunda/camunda-platform-helm/blob/main/charts/camunda-platform
+
+# IMPORTANT: Make sure to change "chaitan.live" to your domain.
+
+global:
+  identity:
+    auth:
+      publicIssuerUrl: "https://keycloak.chaitan.live/auth/realms/camunda-platform"
+      operate:
+        redirectUrl: "https://operate.chaitan.live"
+      tasklist:
+        redirectUrl: "https://tasklist.chaitan.live"
+      optimize:
+        redirectUrl: "https://optimize.chaitan.live"
+      webModeler:
+        redirectUrl: "https://modeler.chaitan.live"
+
+identity:
+  ingress:
+    enabled: true
+    className: nginx
+    host: "identity.chaitan.live"
+    annotations:
+      ingress.kubernetes.io/rewrite-target:
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    tls:
+      enabled: true
+      secretName: camunda-platform-identity
+  fullURL: "https://identity.chaitan.live"
+
+
+  keycloak:
+    ingress:
+      enabled: true
+      ingressClassName: nginx
+      hostname: "keycloak.chaitan.live"
+    annotations:
+      ingress.kubernetes.io/rewrite-target:
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    tls:
+      enabled: false
+      secretName: camunda-platform-keycloak
+
+operate:
+  ingress:
+    enabled: true
+    className: nginx
+    host: "operate.chaitan.live"
+    annotations:
+      ingress.kubernetes.io/rewrite-target:
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    tls:
+      enabled: true
+      secretName: camunda-platform-operate
+
+optimize:
+  ingress:
+    enabled: true
+    className: nginx
+    host: "optimize.chaitan.live"
+    annotations:
+      ingress.kubernetes.io/rewrite-target:
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    tls:
+      enabled: true
+      secretName: camunda-platform-optimize
+
+tasklist:
+  ingress:
+    enabled: true
+    className: nginx
+    host: "tasklist.chaitan.live"
+    annotations:
+      ingress.kubernetes.io/rewrite-target:
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    tls:
+      enabled: true
+      secretName: camunda-platform-tasklist
+
+zeebe-gateway:
+  ingress:
+    enabled: true
+    className: nginx
+    host: "zeebe.chaitan.live"
+    annotations:
+      ingress.kubernetes.io/rewrite-target:
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    tls:
+      enabled: true
+      secretName: camunda-platform-zeebe
+
+webModeler:
+  ingress:
+    enabled: true
+    className: nginx
+    webapp:
+      host: "modeler.chaitan.live"
+    annotations:
+      ingress.kubernetes.io/rewrite-target:
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    tls:
+      enabled: true
+      secretName: camunda-platform-zeebe
+    websockets:
+      host: "modeler-ws.chaitan.live"
